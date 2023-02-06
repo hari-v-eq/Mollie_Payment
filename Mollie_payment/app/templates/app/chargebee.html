@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+
+<body>
+
+<h1>The button Element</h1>
+
+<!-- <button type="button" onclick="alert('Hello world!')">Click Me!</button> -->
+<button href="javascript:void(0)" onclick="openCheckout()">
+    Subscribe
+  </button>
+ 
+</body>
+<script src="https://js.chargebee.com/v2/chargebee.js"></script>
+
+<!-- <script src="https://js.mollie.com/v1/mollie.js"></script> -->
+
+
+<script>
+        var cbInstance, cart;
+
+        window.addEventListener('DOMContentLoaded', function() {
+        cbInstance = Chargebee.init({
+            site: "chinuki-test",
+            isItemsModel: true,
+
+        
+        })
+   
+
+        cbInstance.setCheckoutCallbacks(function(cart) {
+            return {
+                success: function(hpid) {
+                    console.log('success', hpid)
+                }
+            }
+        })
+
+        cart = cbInstance.getCart()
+        })
+        function openCheckout() {
+            const planPriceId = 'ABO-EUR-Weekly' // Plan price point ID is used to identify the product 
+            const planPriceQuantity = 1
+            const product = cbInstance.initializeProduct(planPriceId, planPriceQuantity)
+            cart.replaceProduct(product);
+            
+            // Adding an addon
+            product.addAddon({ 
+                // Addon price point ID
+              id: "43710272995596-EUR-Weekly", 
+
+            
+              quantity: 1 
+            })
+    
+            // Adding a coupon
+            // product.addCoupon("fourty")
+    
+            // Dynamically changing Plan quantity using setPlanQuantity
+            // product.setPlanQuantity(planPriceQuantity);
+      
+            // Removing Addons using removeAddon
+            // product.removeAddon("silver-pass-USD-monthly"); // Addon price point ID
+            
+            // Passing values for custom fields
+            // product.setCustomData({referral: "yes", corporate_agent: "no"});
+    
+            // Opening the checkout
+            cart.proceedToCheckout();
+
+
+
+
+
+
+        
+        }
+    </script>
+</html>
